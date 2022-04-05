@@ -330,3 +330,23 @@
 
   </project>
 #+end_src
+
+* Colophon
+
+** Build script
+
+To tangle [[file:./build.xml][=build.xml=]] use the following command:
+
+#+begin_src sh
+  emacs README.org --batch --eval="(org-babel-tangle)"
+#+end_src
+
+** HTML page
+
+To weave the =README.html= use the following command:
+
+#+begin_src sh
+  emacs README.org --batch --eval="(org-html-export-to-html)"
+#+end_src
+
+Although this will probably kick up a fuss if it can't find the =htmlize= package.
