@@ -339,6 +339,7 @@ To tangle [[file:./build.xml][=build.xml=]] use the following command:
 
 #+begin_src sh
   emacs README.org --batch --eval="(org-babel-tangle)"
+  xmllint --format --pretty 1 --output build.xml build.xml
 #+end_src
 
 ** HTML page

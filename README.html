@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-04-05 Tue 12:10 -->
+<!-- 2022-04-05 Tue 12:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Myrmidons</title>
@@ -201,10 +201,10 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc13c694">1. Colophon</a>
+<li><a href="#org2894251">1. Colophon</a>
 <ul>
-<li><a href="#org80cc6e8">1.1. Build script</a></li>
-<li><a href="#orgc5e4796">1.2. HTML page</a></li>
+<li><a href="#org9bbabca">1.1. Build script</a></li>
+<li><a href="#org242ef29">1.2. HTML page</a></li>
 </ul>
 </li>
 </ul>
@@ -542,12 +542,12 @@
 </pre>
 </div>
 
-<div id="outline-container-orgc13c694" class="outline-2">
-<h2 id="orgc13c694"><span class="section-number-2">1.</span> Colophon</h2>
+<div id="outline-container-org2894251" class="outline-2">
+<h2 id="org2894251"><span class="section-number-2">1.</span> Colophon</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org80cc6e8" class="outline-3">
-<h3 id="org80cc6e8"><span class="section-number-3">1.1.</span> Build script</h3>
+<div id="outline-container-org9bbabca" class="outline-3">
+<h3 id="org9bbabca"><span class="section-number-3">1.1.</span> Build script</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 To tangle <a href="./build.xml"><code>build.xml</code></a> use the following command:
@@ -555,13 +555,14 @@ To tangle <a href="./build.xml"><code>build.xml</code></a> use the following com
 
 <div class="org-src-container">
 <pre class="src src-sh">emacs README.org --batch --eval=<span style="color: #2d9574;">"(org-babel-tangle)"</span>
+xmllint --format --pretty <span style="color: #4e3163;">1</span> --output build.xml build.xml
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgc5e4796" class="outline-3">
-<h3 id="orgc5e4796"><span class="section-number-3">1.2.</span> HTML page</h3>
+<div id="outline-container-org242ef29" class="outline-3">
+<h3 id="org242ef29"><span class="section-number-3">1.2.</span> HTML page</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 To weave the <code>README.html</code> use the following command:
@@ -581,7 +582,7 @@ Although this will probably kick up a fuss if it can't find the <code>htmlize</c
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Alex Zarebski</p>
-<p class="date">Created: 2022-04-05 Tue 12:10</p>
+<p class="date">Created: 2022-04-05 Tue 12:19</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
