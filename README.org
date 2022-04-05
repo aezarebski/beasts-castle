@@ -1,5 +1,5 @@
 #+title: Myrmidons
-#+Time-stamp: <Last modified: 2022-04-05 14:30:13>
+#+Time-stamp: <Last modified: 2022-04-05 14:48:15>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -9,6 +9,29 @@ This page is a literate program which produces the [[https://ant.apache.org/][Ap
 [[file:./build.xml][=build.xml=]], script used as the basis of many [[http://www.beast2.org/][BEAST2]] packages. This document is
 intended to help explain the build script for those writing packages of their
 own. There is a manual for Ant available [[https://ant.apache.org/manual/][online]].
+
+** Usage
+
+To use =build.xml=, simply copy that file into an empty directory and run =ant
+skeleton= to set up the required. The resulting directory structure should look
+like the following example
+
+#+begin_example
+$ tree .
+.
+├── build.xml
+├── COPYING
+├── doc
+├── examples
+├── lib
+├── README.md
+├── src
+├── templates
+├── test
+└── version.xml
+
+6 directories, 4 files
+#+end_example
 
 ** Project
 
