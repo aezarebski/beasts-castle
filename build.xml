@@ -15,8 +15,8 @@
   <property name="scripts" location="scripts"/>
   <property name="templates" location="templates"/>
   <!-- BEAST branch and version to build against
-         (only different for version tags because of
-         a Github peculiarity) -->
+       (only different for version tags because of
+       a Github peculiarity) -->
   <property name="beast-branch" value="master"/>
   <property name="beast-version" value="master"/>
   <!-- Names of temporary build/test directories -->
@@ -30,11 +30,11 @@
   <target name="init">
     <available file="version.xml" property="versionAvailable"/>
     <fail unless="versionAvailable">
-            ** Required file version.xml does not exist. **
-            If this is a new project, run "ant skeleton" from
-            the command line to create the files required for
-            your BEAST 2 package.
-        </fail>
+          ** Required file version.xml does not exist. **
+          If this is a new project, run "ant skeleton" from
+          the command line to create the files required for
+          your BEAST 2 package.
+      </fail>
     <!-- Read package name and version from xml file -->
     <xmlproperty file="version.xml" prefix="fromVersionFile"/>
     <property name="projName" value="${fromVersionFile.addon(name)}"/>
@@ -193,10 +193,10 @@
   <!-- Create skeleton package layout in current directory -->
   <target name="skeleton">
     <fail><condition><or><resourcecount when="gt" count="1"><fileset dir="${basedir}"/></resourcecount><resourcecount when="gt" count="1"><dirset dir="${basedir}"/></resourcecount></or></condition>
-
-            ** This directory contains files besides the build script. **
-            You should run "ant skeleton" in a directory containing only the build script.
-        </fail>
+  
+          ** This directory contains files besides the build script. **
+          You should run "ant skeleton" in a directory containing only the build script.
+      </fail>
     <echo>===============================</echo>
     <echo>Create skeleton BEAST 2 package</echo>
     <echo>===============================</echo>
@@ -210,11 +210,11 @@
     <input addproperty="beastVersionReq" defaultvalue="2.1.0">Enter minimum required BEAST 2 version</input>
     <echo>Assembling files and directory structure...</echo>
     <echo file="version.xml">&lt;addon name="${projName}" version="${projVersion}"&gt;
-            &lt;depends on="beast2" atleast="${beastVersionReq}"/&gt;
-
-            &lt;!-- Add other dependencies as necessary. --&gt;
-            &lt;/addon&gt;
-        </echo>
+          &lt;depends on="beast2" atleast="${beastVersionReq}"/&gt;
+  
+          &lt;!-- Add other dependencies as necessary. --&gt;
+          &lt;/addon&gt;
+      </echo>
     <echo file="README.md" message="README for my package.${line.separator}"/>
     <condition property="licenseURL" value="https://www.gnu.org/licenses/gpl-3.0.txt">
       <equals arg1="${license}" arg2="gpl3"/>
