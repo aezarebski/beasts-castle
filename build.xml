@@ -26,6 +26,11 @@
   <property name="test-reports" location="test-reports"/>
   <property name="dist" location="dist"/>
   <property name="pack" location="${dist}/package"/>
+  <condition property="readme" value="README.md" else="README.org">
+    <resourceexists>
+      <file file="README.md"/>
+    </resourceexists>
+  </condition>
   <!-- Prepare for compilation -->
   <target name="init">
     <available file="version.xml" property="versionAvailable"/>
@@ -151,7 +156,7 @@
       <fileset dir="${lib}" includes="*.jar"/>
     </copy>
     <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}"/>
-    <copy file="README.md" tofile="${pack}/README"/>
+    <copy file="${readme}" tofile="${pack}/README"/>
     <copy file="COPYING" todir="${pack}"/>
     <copy todir="${pack}">
       <fileset dir="${lib}" includes="LICENSE*"/>

@@ -1,5 +1,5 @@
 #+title: Myrmidons
-#+Time-stamp: <Last modified: 2022-04-05 14:48:15>
+#+Time-stamp: <Last modified: 2022-04-06 13:57:11>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -59,7 +59,7 @@ Note two important properties:
 - the expected Java version is =1.8=.
 
 #+name: properties
-#+begin_src xml :noweb yes
+#+begin_src xml :noweb no-export
   <!-- Source, JUnit test code and jar library locations. -->
   <property name="src" location="src"/>
   <property name="test" location="test"/>
@@ -91,6 +91,22 @@ Note two important properties:
   <property name="test-reports" location="test-reports"/>
   <property name="dist" location="dist"/>
   <property name="pack" location="${dist}/package"/>
+
+  <<readme-path>>
+#+end_src
+
+*** README file
+
+People may use a variety of different markdowns for their README, the following
+will look for either a vanilla =.md= file or a =.org= file to use as the README.
+
+#+name: readme-path
+#+begin_src xml :noweb yes
+  <condition property="readme" value="README.md" else="README.org">
+    <resourceexists>
+      <file file="README.md" />
+    </resourceexists>
+  </condition>
 #+end_src
 
 ** Target definitions
@@ -254,7 +270,7 @@ Note two important properties:
       </copy>
       <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" />
 
-      <copy file="README.md" tofile="${pack}/README" />
+      <copy file="${readme}" tofile="${pack}/README" />
       <copy file="COPYING" todir="${pack}" />
       <copy todir="${pack}">
           <fileset dir="${lib}" includes="LICENSE*" />
