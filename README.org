@@ -1,5 +1,5 @@
 #+title: Myrmidons
-#+Time-stamp: <Last modified: 2022-04-06 15:52:46>
+#+Time-stamp: <Last modified: 2022-04-06 15:56:30>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -137,7 +137,7 @@ if the former does not exist, the latter should be used in the =build= task.
 ** Target definitions
 
 #+name: targets
-#+begin_src xml :noweb yes
+#+begin_src xml :noweb no-export
   <!-- Prepare for compilation -->
   <target name="init">
 
@@ -295,7 +295,7 @@ if the former does not exist, the latter should be used in the =build= task.
 The main target for building the package is =build=.
 
 #+name: target-build
-#+begin_src xml :noweb yes
+#+begin_src xml :noweb no-export
   <target name="build" depends="compile,copy-resources">
       <property name="fullName" value="${projName}.v${projVersion}"/>
 
@@ -361,7 +361,7 @@ The main target for building the package is =build=.
 The target used to set up a new package is =skeleton=.
 
 #+name: target-skeleton
-#+begin_src xml :noweb yes
+#+begin_src xml :noweb no-export
   <target name="skeleton">
 
       <fail>
@@ -445,6 +445,7 @@ The target used to set up a new package is =skeleton=.
 
   </target>
 #+end_src
+
 * Colophon
 
 The [[file:./myrmidons.xml][myrmidons.xml]] file contains the instructions to build both build script and

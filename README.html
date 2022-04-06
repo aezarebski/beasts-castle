@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-04-06 Wed 13:57 -->
+<!-- 2022-04-06 Wed 15:55 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Myrmidons</title>
@@ -201,21 +201,23 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgaea185d">1. Build script</a>
+<li><a href="#org1f178da">1. Build script</a>
 <ul>
-<li><a href="#orgb828c60">1.1. Usage</a></li>
-<li><a href="#org77b73e7">1.2. Project</a></li>
-<li><a href="#orge7db540">1.3. Property definitions</a></li>
-<li><a href="#orgf4d6bcc">1.4. Target definitions</a></li>
+<li><a href="#org28eed23">1.1. Usage</a></li>
+<li><a href="#org544c3f5">1.2. Project</a></li>
+<li><a href="#orgfa44cf0">1.3. Property definitions</a></li>
+<li><a href="#org5157f6d">1.4. Target definitions</a></li>
+<li><a href="#orgac5e665">1.5. Build</a></li>
+<li><a href="#orge5369b8">1.6. Skeleton</a></li>
 </ul>
 </li>
-<li><a href="#orgaa4d072">2. Colophon</a></li>
+<li><a href="#orga5a219a">2. Colophon</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgaea185d" class="outline-2">
-<h2 id="orgaea185d"><span class="section-number-2">1.</span> Build script</h2>
+<div id="outline-container-org1f178da" class="outline-2">
+<h2 id="org1f178da"><span class="section-number-2">1.</span> Build script</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This page is a literate program which produces the <a href="https://ant.apache.org/">Apache Ant</a> build script,
@@ -225,8 +227,8 @@ own. There is a manual for Ant available <a href="https://ant.apache.org/manual/
 </p>
 </div>
 
-<div id="outline-container-orgb828c60" class="outline-3">
-<h3 id="orgb828c60"><span class="section-number-3">1.1.</span> Usage</h3>
+<div id="outline-container-org28eed23" class="outline-3">
+<h3 id="org28eed23"><span class="section-number-3">1.1.</span> Usage</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 To use <code>build.xml</code>, simply copy that file into an empty directory and run <code>ant
@@ -234,7 +236,7 @@ skeleton</code> to set up the required. The resulting directory structure should
 like the following example
 </p>
 
-<pre class="example" id="orge8b93c7">
+<pre class="example" id="org0fb9d59">
 $ tree .
 .
 ├── build.xml
@@ -253,15 +255,21 @@ $ tree .
 </div>
 </div>
 
-<div id="outline-container-org77b73e7" class="outline-3">
-<h3 id="org77b73e7"><span class="section-number-3">1.2.</span> Project</h3>
+<div id="outline-container-org544c3f5" class="outline-3">
+<h3 id="org544c3f5"><span class="section-number-3">1.2.</span> Project</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
-The build script defines <a href="#orge7db540">properties</a> and <a href="#orgf4d6bcc">targets</a> described in more detail below.
+The build script defines <a href="#orgfa44cf0">properties</a> and <a href="#org5157f6d">targets</a> described in more detail below.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-xml">&lt;<span style="color: #6c3163; font-weight: bold;">project</span> <span style="color: #715ab1;">default</span>=<span style="color: #2d9574;">"build"</span> <span style="color: #715ab1;">basedir</span>=<span style="color: #2d9574;">"."</span>&gt;
+
+  &lt;<span style="color: #6c3163; font-weight: bold;">description</span>&gt;
+      This build file can be used to build an existing BEAST2
+      package of to create a skeleton for a new one. See the tasks
+      'build' and 'skeleton'.
+  &lt;/<span style="color: #6c3163; font-weight: bold;">description</span>&gt;
 
   &lt;&lt;<span style="color: #6c3163; font-weight: bold;">properties</span>&gt;&gt;
 
@@ -273,13 +281,14 @@ The build script defines <a href="#orge7db540">properties</a> and <a href="#orgf
 
 <p>
 We can see that the default target used by Ant is the <code>build</code> target which
-compiles the project but does not run the tests
+compiles the project but does not run the tests. The contents of the <code>description</code>
+tag are printed when ant is called with the <code>-projecthelp</code> flag.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orge7db540" class="outline-3">
-<h3 id="orge7db540"><span class="section-number-3">1.3.</span> Property definitions</h3>
+<div id="outline-container-orgfa44cf0" class="outline-3">
+<h3 id="orgfa44cf0"><span class="section-number-3">1.3.</span> Property definitions</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 Note two important properties:
@@ -292,7 +301,7 @@ for a copy of the BEAST2 as a sibling of the package directory, and</li>
 </ul>
 
 <div class="org-src-container">
-<pre class="src src-xml" id="orgc52f5a2"><span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Source, JUnit test code and jar library locations.</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
+<pre class="src src-xml" id="orgde16cbe"><span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Source, JUnit test code and jar library locations.</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
 &lt;<span style="color: #6c3163; font-weight: bold;">property</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"src"</span> <span style="color: #715ab1;">location</span>=<span style="color: #2d9574;">"src"</span>/&gt;
 &lt;<span style="color: #6c3163; font-weight: bold;">property</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"test"</span> <span style="color: #715ab1;">location</span>=<span style="color: #2d9574;">"test"</span>/&gt;
 &lt;<span style="color: #6c3163; font-weight: bold;">property</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"lib"</span> <span style="color: #715ab1;">location</span>=<span style="color: #2d9574;">"lib"</span>/&gt;
@@ -325,20 +334,24 @@ for a copy of the BEAST2 as a sibling of the package directory, and</li>
 &lt;<span style="color: #6c3163; font-weight: bold;">property</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"pack"</span> <span style="color: #715ab1;">location</span>=<span style="color: #2d9574;">"${dist}/package"</span>/&gt;
 
 &lt;&lt;<span style="color: #6c3163; font-weight: bold;">readme-path</span>&gt;&gt;
+
+&lt;&lt;<span style="color: #6c3163; font-weight: bold;">license-filename</span>&gt;&gt;
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgc009d1d" class="outline-4">
-<h4 id="orgc009d1d"><span class="section-number-4">1.3.1.</span> README file</h4>
+<div id="outline-container-orgc270139" class="outline-4">
+<h4 id="orgc270139"><span class="section-number-4">1.3.1.</span> README</h4>
 <div class="outline-text-4" id="text-1-3-1">
 <p>
 People may use a variety of different markdowns for their README, the following
 will look for either a vanilla <code>.md</code> file or a <code>.org</code> file to use as the README.
+Since the skeleton produces a <code>README.md</code> this should be the default that gets
+used.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-xml" id="org2e5e225">&lt;<span style="color: #6c3163; font-weight: bold;">condition</span> <span style="color: #715ab1;">property</span>=<span style="color: #2d9574;">"readme"</span> <span style="color: #715ab1;">value</span>=<span style="color: #2d9574;">"README.md"</span> <span style="color: #715ab1;">else</span>=<span style="color: #2d9574;">"README.org"</span>&gt;
+<pre class="src src-xml" id="org7509abe">&lt;<span style="color: #6c3163; font-weight: bold;">condition</span> <span style="color: #715ab1;">property</span>=<span style="color: #2d9574;">"readme"</span> <span style="color: #715ab1;">value</span>=<span style="color: #2d9574;">"README.md"</span> <span style="color: #715ab1;">else</span>=<span style="color: #2d9574;">"README.org"</span>&gt;
   &lt;<span style="color: #6c3163; font-weight: bold;">resourceexists</span>&gt;
     &lt;<span style="color: #6c3163; font-weight: bold;">file</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"README.md"</span> /&gt;
   &lt;/<span style="color: #6c3163; font-weight: bold;">resourceexists</span>&gt;
@@ -347,13 +360,32 @@ will look for either a vanilla <code>.md</code> file or a <code>.org</code> file
 </div>
 </div>
 </div>
+
+<div id="outline-container-orge7867a9" class="outline-4">
+<h4 id="orge7867a9"><span class="section-number-4">1.3.2.</span> LICENSE</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+The skeleton names the license file <code>COPYING</code>, but another common name is <code>LICENSE</code>,
+if the former does not exist, the latter should be used in the <code>build</code> task.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-xml" id="orgd6d19c6">&lt;<span style="color: #6c3163; font-weight: bold;">condition</span> <span style="color: #715ab1;">property</span>=<span style="color: #2d9574;">"licenseFilename"</span> <span style="color: #715ab1;">value</span>=<span style="color: #2d9574;">"COPYING"</span> <span style="color: #715ab1;">else</span>=<span style="color: #2d9574;">"LICENSE"</span>&gt;
+  &lt;<span style="color: #6c3163; font-weight: bold;">resourceexists</span>&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">file</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"COPYING"</span> /&gt;
+  &lt;/<span style="color: #6c3163; font-weight: bold;">resourceexists</span>&gt;
+&lt;/<span style="color: #6c3163; font-weight: bold;">condition</span>&gt;
+</pre>
+</div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-orgf4d6bcc" class="outline-3">
-<h3 id="orgf4d6bcc"><span class="section-number-3">1.4.</span> Target definitions</h3>
+<div id="outline-container-org5157f6d" class="outline-3">
+<h3 id="org5157f6d"><span class="section-number-3">1.4.</span> Target definitions</h3>
 <div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
-<pre class="src src-xml" id="orgc9cfe95"><span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Prepare for compilation</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
+<pre class="src src-xml" id="org2918703"><span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Prepare for compilation</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
 &lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"init"</span>&gt;
 
     &lt;<span style="color: #6c3163; font-weight: bold;">available</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"version.xml"</span> <span style="color: #715ab1;">property</span>=<span style="color: #2d9574;">"versionAvailable"</span>/&gt;
@@ -490,9 +522,33 @@ will look for either a vanilla <code>.md</code> file or a <code>.org</code> file
     &lt;<span style="color: #6c3163; font-weight: bold;">fail</span> <span style="color: #715ab1;">if</span>=<span style="color: #2d9574;">"testFailed"</span> <span style="color: #715ab1;">status</span>=<span style="color: #2d9574;">"1"</span> <span style="color: #715ab1;">message</span>=<span style="color: #2d9574;">"Unit test failed."</span>/&gt;
 &lt;/<span style="color: #6c3163; font-weight: bold;">target</span>&gt;
 
+&lt;&lt;<span style="color: #6c3163; font-weight: bold;">target-build</span>&gt;&gt;
 
-<span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Create BEAST 2 package</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
-&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"build"</span> <span style="color: #715ab1;">depends</span>=<span style="color: #2d9574;">"compile,copy-resources"</span>&gt;
+<span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Revert to pristine state.</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
+&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"clean"</span>&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build}"</span> /&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build-lib}"</span> /&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${dist}"</span> /&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build-test}"</span> /&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${test-reports}"</span> /&gt;
+&lt;/<span style="color: #6c3163; font-weight: bold;">target</span>&gt;
+
+&lt;&lt;<span style="color: #6c3163; font-weight: bold;">target-skeleton</span>&gt;&gt;
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgac5e665" class="outline-3">
+<h3 id="orgac5e665"><span class="section-number-3">1.5.</span> Build</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+The main target for building the package is <code>build</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-xml" id="org050b380">&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"build"</span> <span style="color: #715ab1;">depends</span>=<span style="color: #2d9574;">"compile,copy-resources"</span>&gt;
     &lt;<span style="color: #6c3163; font-weight: bold;">property</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"fullName"</span> <span style="color: #715ab1;">value</span>=<span style="color: #2d9574;">"${projName}.v${projVersion}"</span>/&gt;
 
     &lt;<span style="color: #6c3163; font-weight: bold;">mkdir</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${pack}"</span>/&gt;
@@ -511,7 +567,7 @@ will look for either a vanilla <code>.md</code> file or a <code>.org</code> file
     &lt;<span style="color: #6c3163; font-weight: bold;">jar</span> <span style="color: #715ab1;">jarfile</span>=<span style="color: #2d9574;">"${pack}/lib/${fullName}.jar"</span> <span style="color: #715ab1;">basedir</span>=<span style="color: #2d9574;">"${build}"</span> /&gt;
 
     &lt;<span style="color: #6c3163; font-weight: bold;">copy</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"${readme}"</span> <span style="color: #715ab1;">tofile</span>=<span style="color: #2d9574;">"${pack}/README"</span> /&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">copy</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"COPYING"</span> <span style="color: #715ab1;">todir</span>=<span style="color: #2d9574;">"${pack}"</span> /&gt;
+    &lt;<span style="color: #6c3163; font-weight: bold;">copy</span> <span style="color: #715ab1;">file</span>=<span style="color: #2d9574;">"${licenseFilename}"</span> <span style="color: #715ab1;">todir</span>=<span style="color: #2d9574;">"${pack}"</span> /&gt;
     &lt;<span style="color: #6c3163; font-weight: bold;">copy</span> <span style="color: #715ab1;">todir</span>=<span style="color: #2d9574;">"${pack}"</span>&gt;
         &lt;<span style="color: #6c3163; font-weight: bold;">fileset</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${lib}"</span> <span style="color: #715ab1;">includes</span>=<span style="color: #2d9574;">"LICENSE*"</span> /&gt;
     &lt;/<span style="color: #6c3163; font-weight: bold;">copy</span>&gt;
@@ -550,20 +606,20 @@ will look for either a vanilla <code>.md</code> file or a <code>.org</code> file
     &lt;<span style="color: #6c3163; font-weight: bold;">echo</span>/&gt;
     &lt;<span style="color: #6c3163; font-weight: bold;">echo</span>&gt;** Package ${dist}/${fullName}.zip created successfuly! **&lt;/<span style="color: #6c3163; font-weight: bold;">echo</span>&gt;
 &lt;/<span style="color: #6c3163; font-weight: bold;">target</span>&gt;
+</pre>
+</div>
+</div>
+</div>
 
+<div id="outline-container-orge5369b8" class="outline-3">
+<h3 id="orge5369b8"><span class="section-number-3">1.6.</span> Skeleton</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+The target used to set up a new package is <code>skeleton</code>.
+</p>
 
-<span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Revert to pristine state.</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
-&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"clean"</span>&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build}"</span> /&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build-lib}"</span> /&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${dist}"</span> /&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${build-test}"</span> /&gt;
-    &lt;<span style="color: #6c3163; font-weight: bold;">delete</span> <span style="color: #715ab1;">dir</span>=<span style="color: #2d9574;">"${test-reports}"</span> /&gt;
-&lt;/<span style="color: #6c3163; font-weight: bold;">target</span>&gt;
-
-
-<span style="color: #2aa1ae; background-color: #ecf3ec;">&lt;!-- </span><span style="color: #2aa1ae; background-color: #ecf3ec;">Create skeleton package layout in current directory</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> --&gt;</span>
-&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"skeleton"</span>&gt;
+<div class="org-src-container">
+<pre class="src src-xml" id="org37de2a3">&lt;<span style="color: #6c3163; font-weight: bold;">target</span> <span style="color: #715ab1;">name</span>=<span style="color: #2d9574;">"skeleton"</span>&gt;
 
     &lt;<span style="color: #6c3163; font-weight: bold;">fail</span>&gt;
         &lt;<span style="color: #6c3163; font-weight: bold;">condition</span>&gt;
@@ -650,9 +706,8 @@ will look for either a vanilla <code>.md</code> file or a <code>.org</code> file
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgaa4d072" class="outline-2">
-<h2 id="orgaa4d072"><span class="section-number-2">2.</span> Colophon</h2>
+<div id="outline-container-orga5a219a" class="outline-2">
+<h2 id="orga5a219a"><span class="section-number-2">2.</span> Colophon</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 The <a href="./myrmidons.xml">myrmidons.xml</a> file contains the instructions to build both build script and
@@ -669,7 +724,7 @@ you haven't seen Ant before.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Alex Zarebski</p>
-<p class="date">Created: 2022-04-06 Wed 13:57</p>
+<p class="date">Created: 2022-04-06 Wed 15:55</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
