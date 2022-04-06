@@ -1,5 +1,5 @@
 #+title: Myrmidons
-#+Time-stamp: <Last modified: 2022-04-06 13:57:11>
+#+Time-stamp: <Last modified: 2022-04-06 15:52:46>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -40,6 +40,12 @@ The build script defines [[*Property definitions][properties]] and [[*Target def
 #+begin_src xml :tangle build.xml :noweb no-export
   <project default="build" basedir=".">
 
+    <description>
+        This build file can be used to build an existing BEAST2
+        package of to create a skeleton for a new one. See the tasks
+        'build' and 'skeleton'.
+    </description>
+
     <<properties>>
 
     <<targets>>
@@ -48,7 +54,8 @@ The build script defines [[*Property definitions][properties]] and [[*Target def
 #+end_src
 
 We can see that the default target used by Ant is the =build= target which
-compiles the project but does not run the tests
+compiles the project but does not run the tests. The contents of the =description=
+tag are printed when ant is called with the =-projecthelp= flag.
 
 ** Property definitions
 
@@ -93,18 +100,36 @@ Note two important properties:
   <property name="pack" location="${dist}/package"/>
 
   <<readme-path>>
+
+  <<license-filename>>
 #+end_src
 
-*** README file
+*** README
 
 People may use a variety of different markdowns for their README, the following
 will look for either a vanilla =.md= file or a =.org= file to use as the README.
+Since the skeleton produces a =README.md= this should be the default that gets
+used.
 
 #+name: readme-path
 #+begin_src xml :noweb yes
   <condition property="readme" value="README.md" else="README.org">
     <resourceexists>
       <file file="README.md" />
+    </resourceexists>
+  </condition>
+#+end_src
+
+*** LICENSE
+
+The skeleton names the license file =COPYING=, but another common name is =LICENSE=,
+if the former does not exist, the latter should be used in the =build= task.
+
+#+name: license-filename
+#+begin_src xml :noweb yes
+  <condition property="licenseFilename" value="COPYING" else="LICENSE">
+    <resourceexists>
+      <file file="COPYING" />
     </resourceexists>
   </condition>
 #+end_src
@@ -250,8 +275,27 @@ will look for either a vanilla =.md= file or a =.org= file to use as the README.
       <fail if="testFailed" status="1" message="Unit test failed."/>
   </target>
 
+  <<target-build>>
 
-  <!-- Create BEAST 2 package -->
+  <!-- Revert to pristine state. -->
+  <target name="clean">
+      <delete dir="${build}" />
+      <delete dir="${build-lib}" />
+      <delete dir="${dist}" />
+      <delete dir="${build-test}" />
+      <delete dir="${test-reports}" />
+  </target>
+
+  <<target-skeleton>>
+
+#+end_src
+
+** Build
+
+The main target for building the package is =build=.
+
+#+name: target-build
+#+begin_src xml :noweb yes
   <target name="build" depends="compile,copy-resources">
       <property name="fullName" value="${projName}.v${projVersion}"/>
 
@@ -271,7 +315,7 @@ will look for either a vanilla =.md= file or a =.org= file to use as the README.
       <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" />
 
       <copy file="${readme}" tofile="${pack}/README" />
-      <copy file="COPYING" todir="${pack}" />
+      <copy file="${licenseFilename}" todir="${pack}" />
       <copy todir="${pack}">
           <fileset dir="${lib}" includes="LICENSE*" />
       </copy>
@@ -310,19 +354,14 @@ will look for either a vanilla =.md= file or a =.org= file to use as the README.
       <echo/>
       <echo>** Package ${dist}/${fullName}.zip created successfuly! **</echo>
   </target>
+#+end_src
 
+** Skeleton
 
-  <!-- Revert to pristine state. -->
-  <target name="clean">
-      <delete dir="${build}" />
-      <delete dir="${build-lib}" />
-      <delete dir="${dist}" />
-      <delete dir="${build-test}" />
-      <delete dir="${test-reports}" />
-  </target>
+The target used to set up a new package is =skeleton=.
 
-
-  <!-- Create skeleton package layout in current directory -->
+#+name: target-skeleton
+#+begin_src xml :noweb yes
   <target name="skeleton">
 
       <fail>
@@ -406,7 +445,6 @@ will look for either a vanilla =.md= file or a =.org= file to use as the README.
 
   </target>
 #+end_src
-
 * Colophon
 
 The [[file:./myrmidons.xml][myrmidons.xml]] file contains the instructions to build both build script and

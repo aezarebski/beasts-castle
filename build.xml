@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <project default="build" basedir=".">
+  <description>
+      This build file can be used to build an existing BEAST2
+      package of to create a skeleton for a new one. See the tasks
+      'build' and 'skeleton'.
+  </description>
   <!-- Source, JUnit test code and jar library locations. -->
   <property name="src" location="src"/>
   <property name="test" location="test"/>
@@ -29,6 +34,11 @@
   <condition property="readme" value="README.md" else="README.org">
     <resourceexists>
       <file file="README.md"/>
+    </resourceexists>
+  </condition>
+  <condition property="licenseFilename" value="COPYING" else="LICENSE">
+    <resourceexists>
+      <file file="COPYING"/>
     </resourceexists>
   </condition>
   <!-- Prepare for compilation -->
@@ -141,7 +151,6 @@
     </junit>
     <fail if="testFailed" status="1" message="Unit test failed."/>
   </target>
-  <!-- Create BEAST 2 package -->
   <target name="build" depends="compile,copy-resources">
     <property name="fullName" value="${projName}.v${projVersion}"/>
     <mkdir dir="${pack}"/>
@@ -157,7 +166,7 @@
     </copy>
     <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}"/>
     <copy file="${readme}" tofile="${pack}/README"/>
-    <copy file="COPYING" todir="${pack}"/>
+    <copy file="${licenseFilename}" todir="${pack}"/>
     <copy todir="${pack}">
       <fileset dir="${lib}" includes="LICENSE*"/>
     </copy>
@@ -195,7 +204,6 @@
     <delete dir="${build-test}"/>
     <delete dir="${test-reports}"/>
   </target>
-  <!-- Create skeleton package layout in current directory -->
   <target name="skeleton">
     <fail><condition><or><resourcecount when="gt" count="1"><fileset dir="${basedir}"/></resourcecount><resourcecount when="gt" count="1"><dirset dir="${basedir}"/></resourcecount></or></condition>
   
