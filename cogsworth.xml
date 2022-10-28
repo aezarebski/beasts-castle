@@ -3,10 +3,15 @@
   <description>
          _________________________________________________________________________
         |                                                                         |
-        | COGSWORTH                                                               |
-        | =========                                                               |
+        |          __________  ____________       ______  ____  ________  __      |
+        |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
+        |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
+        |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
+        |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
         |                                                                         |
-        | This build script contains some useful tasks for working with BEAST.    |
+        |                                                                         |
+        | The COGSWORTHv1.1 build script contains some useful tasks for working   |
+        | with BEAST.                                                             |
         |                                                                         |
         | Usage                                                                   |
         | -----                                                                   |
@@ -19,7 +24,7 @@
         |                                                                         |
         | $ ant tracer                                                            |
         |                                                                         |
-        | To print this help message                                              |
+        | To print this help message and get a full list of available tasks       |
         |                                                                         |
         | $ ant -p                                                                |
         |                                                                         |
@@ -51,6 +56,16 @@
         <path refid="classpath"/>
       </classpath>
     </java>
+  </target>
+  <target name="master">
+      <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+      <java fork="true" classname="beast.app.beastapp.BeastMain">
+          <classpath>
+              <path refid="classpath"/>
+          </classpath>
+          <arg line="-seed 1"/>
+          <arg path="${beastXML}"/>
+      </java>
   </target>
   <target name="mcmc">
     <echo>Running the MCMC sampler defined in ${beastXML}</echo>
