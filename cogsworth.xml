@@ -109,22 +109,22 @@
       <delete file="fake.txt" />
   </target>
 
-  <target name="get-beast2.6.7">
-      <mkdir dir="lib" />
-      <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
-  </target>
+<target name="get-beast2.6.7">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
+</target>
 
-  <target name="clone-beast2">
-      <exec executable="/usr/bin/git">
-          <arg value="clone" />
-          <arg value="--depth" />
-          <arg value="1" />
-          <arg value="https://github.com/CompEvol/beast2.git" />
-          <arg value="beast2" />
-      </exec>
-      <echo>
-          You may want to run `git fetch --all --tags`
-      </echo>
-  </target>
+<target name="clone-beast2">
+    <exec executable="/usr/bin/git">
+        <arg value="clone" />
+        <arg value="--depth" />
+        <arg value="1" />
+        <arg value="https://github.com/CompEvol/beast2.git" />
+        <arg value="beast2" />
+    </exec>
+    <echo>
+        You may want to run `git fetch --all --tags`
+    </echo>
+</target>
 
 </project>

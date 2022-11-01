@@ -1,9 +1,10 @@
 #+title: Cogsworth
-#+Time-stamp: <Last modified: 2022-10-28 12:03:55>
+#+Time-stamp: <Last modified: 2022-11-01 11:24:03>
 #+startup: overview
 #+OPTIONS: toc:2
 
 #+begin_src xml :tangle cogsworth.xml
+<?xml version="1.0"?>
 <project name="cogsworth" basedir=".">
   <description>
          _________________________________________________________________________
@@ -25,6 +26,10 @@
         |                                                                         |
         | $ ant -DbeastXML=demo.xml mcmc                                          |
         |                                                                         |
+        | There are some targets to fetch JAR files, for example                  |
+        |                                                                         |
+        | $ ant get-beast2.6.7                                                    |
+        |                                                                         |
         | To start tracer there is                                                |
         |                                                                         |
         | $ ant tracer                                                            |
@@ -45,8 +50,10 @@
         | - figtree.jar from https://github.com/rambaut/figtree/releases          |
         | - tracer.jar from https://github.com/beast-dev/tracer/releases          |
         |                                                                         |
-        | You only need the JAR files for the programs that you want to run. The  |
-        | ant manual may be helpful for understanding and extending this script   |
+        | there are some functions to assist in downloading these JAR files such  |
+        | as get-beast2.6.7. You only need the JAR files for the programs that    |
+        | you want to run. The ant manual may be helpful for understanding and    |
+        | extending this script                                                   |
         |                                                                         |
         | - https://ant.apache.org/manual/index.html                              |
         |                                                                         |
@@ -103,8 +110,44 @@
     <java fork="true" jar="lib/tracer.jar">
         </java>
   </target>
+
   <target name="clean">
-    <delete file="fake.txt"/>
+      <delete file="fake.txt" />
   </target>
+#+end_src
+
+The following target demonstrates how we can partially automate the set up by
+including targets that get the desired JAR files. When there are more of these
+they could be lumped into useful combinations.
+
+#+name: target:get-beast2.6.7
+#+begin_src xml :tangle cogsworth.xml
+  <target name="get-beast2.6.7">
+      <mkdir dir="lib" />
+      <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
+  </target>
+#+end_src
+
+While the [[target:get-beast2.6.7][get-beast2.6.7]] target helps get a JAR file to use in the analysis, to
+compile a new package we will need the BEAST2 source. The following target
+clones a copy of this. Note that if you want a particular version, you will need
+to check that version out yourself!
+
+#+begin_src xml :tangle cogsworth.xml
+  <target name="clone-beast2">
+      <exec executable="/usr/bin/git">
+          <arg value="clone" />
+          <arg value="--depth" />
+          <arg value="1" />
+          <arg value="https://github.com/CompEvol/beast2.git" />
+          <arg value="beast2" />
+      </exec>
+      <echo>
+          You may want to run `git fetch --all --tags`
+      </echo>
+  </target>
+#+end_src
+
+#+begin_src xml :tangle cogsworth.xml
 </project>
 #+end_src
