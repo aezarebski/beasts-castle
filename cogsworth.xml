@@ -20,6 +20,10 @@
         |                                                                         |
         | $ ant -DbeastXML=demo.xml mcmc                                          |
         |                                                                         |
+        | There are some targets to fetch JAR files, for example                  |
+        |                                                                         |
+        | $ ant get-beast2.6.7                                                    |
+        |                                                                         |
         | To start tracer there is                                                |
         |                                                                         |
         | $ ant tracer                                                            |
@@ -40,8 +44,10 @@
         | - figtree.jar from https://github.com/rambaut/figtree/releases          |
         | - tracer.jar from https://github.com/beast-dev/tracer/releases          |
         |                                                                         |
-        | You only need the JAR files for the programs that you want to run. The  |
-        | ant manual may be helpful for understanding and extending this script   |
+        | there are some functions to assist in downloading these JAR files such  |
+        | as get-beast2.6.7. You only need the JAR files for the programs that    |
+        | you want to run. The ant manual may be helpful for understanding and    |
+        | extending this script                                                   |
         |                                                                         |
         | - https://ant.apache.org/manual/index.html                              |
         |                                                                         |
@@ -98,7 +104,27 @@
     <java fork="true" jar="lib/tracer.jar">
         </java>
   </target>
+
   <target name="clean">
-    <delete file="fake.txt"/>
+      <delete file="fake.txt" />
   </target>
+
+  <target name="get-beast2.6.7">
+      <mkdir dir="lib" />
+      <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
+  </target>
+
+  <target name="clone-beast2">
+      <exec executable="/usr/bin/git">
+          <arg value="clone" />
+          <arg value="--depth" />
+          <arg value="1" />
+          <arg value="https://github.com/CompEvol/beast2.git" />
+          <arg value="beast2" />
+      </exec>
+      <echo>
+          You may want to run `git fetch --all --tags`
+      </echo>
+  </target>
+
 </project>
