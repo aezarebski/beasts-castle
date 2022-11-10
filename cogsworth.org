@@ -1,119 +1,152 @@
 #+title: Cogsworth
-#+Time-stamp: <Last modified: 2022-11-01 11:24:03>
+#+Time-stamp: <Last modified: 2022-11-10 12:14:20>
 #+startup: overview
 #+OPTIONS: toc:2
 
 #+begin_src xml :tangle cogsworth.xml
-<?xml version="1.0"?>
-<project name="cogsworth" basedir=".">
-  <description>
-         _________________________________________________________________________
-        |                                                                         |
-        |          __________  ____________       ______  ____  ________  __      |
-        |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
-        |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
-        |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
-        |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
-        |                                                                         |
-        |                                                                         |
-        | The COGSWORTHv1.1 build script contains some useful tasks for working   |
-        | with BEAST.                                                             |
-        |                                                                         |
-        | Usage                                                                   |
-        | -----                                                                   |
-        |                                                                         |
-        | To run the MCMC analysis in demo.xml                                    |
-        |                                                                         |
-        | $ ant -DbeastXML=demo.xml mcmc                                          |
-        |                                                                         |
-        | There are some targets to fetch JAR files, for example                  |
-        |                                                                         |
-        | $ ant get-beast2.6.7                                                    |
-        |                                                                         |
-        | To start tracer there is                                                |
-        |                                                                         |
-        | $ ant tracer                                                            |
-        |                                                                         |
-        | To print this help message and get a full list of available tasks       |
-        |                                                                         |
-        | $ ant -p                                                                |
-        |                                                                         |
-        | Libraries                                                               |
-        | ---------                                                               |
-        |                                                                         |
-        | This script assumes there is a directory called lib containing some of  |
-        | the following JAR files:                                                |
-        |                                                                         |
-        | - beast.jar from https://github.com/CompEvol/beast2/releases            |
-        | - DensiTree.v2.2.7.jar from                                             |
-        |   https://www.cs.auckland.ac.nz/~remco/DensiTree/                       |
-        | - figtree.jar from https://github.com/rambaut/figtree/releases          |
-        | - tracer.jar from https://github.com/beast-dev/tracer/releases          |
-        |                                                                         |
-        | there are some functions to assist in downloading these JAR files such  |
-        | as get-beast2.6.7. You only need the JAR files for the programs that    |
-        | you want to run. The ant manual may be helpful for understanding and    |
-        | extending this script                                                   |
-        |                                                                         |
-        | - https://ant.apache.org/manual/index.html                              |
-        |                                                                         |
-        |_________________________________________________________________________|
-    </description>
-  <path id="classpath">
-    <fileset dir="lib" includes="**/*.jar"/>
-  </path>
-  <target name="beauti">
-    <java fork="true" classname="beast.app.beauti.Beauti">
-      <classpath>
-        <path refid="classpath"/>
-      </classpath>
-    </java>
-  </target>
-  <target name="master">
-      <echo>Running the MASTER simulation defined in ${beastXML}</echo>
-      <java fork="true" classname="beast.app.beastapp.BeastMain">
-          <classpath>
-              <path refid="classpath"/>
-          </classpath>
-          <arg line="-seed 1"/>
-          <arg path="${beastXML}"/>
-      </java>
-  </target>
-  <target name="mcmc">
-    <echo>Running the MCMC sampler defined in ${beastXML}</echo>
-    <java fork="true" classname="beast.app.beastapp.BeastMain">
-      <classpath>
-        <path refid="classpath"/>
-      </classpath>
-      <arg line="-seed 1"/>
-      <arg path="${beastXML}"/>
-    </java>
-  </target>
-  <target name="mcmc-keep-going">
-    <java fork="true" classname="beast.app.beastapp.BeastMain">
-      <classpath>
-        <path refid="classpath"/>
-      </classpath>
-      <arg line="-seed 1 -resume"/>
-      <arg path="${beastXML}"/>
-    </java>
-  </target>
-  <target name="figtree">
-    <java fork="true" jar="lib/figtree.jar">
-        </java>
-  </target>
-  <target name="densitree">
-    <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
-        </java>
-  </target>
-  <target name="tracer">
-    <java fork="true" jar="lib/tracer.jar">
-        </java>
-  </target>
+  <?xml version="1.0"?>
+  <project name="cogsworth" basedir=".">
+    <description>
+           _________________________________________________________________________
+          |                                                                         |
+          |          __________  ____________       ______  ____  ________  __      |
+          |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
+          |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
+          |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
+          |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
+          |                                                                         |
+          |                                                                         |
+          | The COGSWORTHv1.1 build script contains some useful tasks for working   |
+          | with BEAST.                                                             |
+          |                                                                         |
+          | Usage                                                                   |
+          | -----                                                                   |
+          |                                                                         |
+          | To run the MCMC analysis in demo.xml                                    |
+          |                                                                         |
+          | $ ant -DbeastXML=demo.xml mcmc                                          |
+          |                                                                         |
+          | There are some targets to fetch JAR files, for example                  |
+          |                                                                         |
+          | $ ant get-beast2.6.7                                                    |
+          |                                                                         |
+          | To start tracer there is                                                |
+          |                                                                         |
+          | $ ant tracer                                                            |
+          |                                                                         |
+          | To print this help message and get a full list of available tasks       |
+          |                                                                         |
+          | $ ant -p                                                                |
+          |                                                                         |
+          | Libraries                                                               |
+          | ---------                                                               |
+          |                                                                         |
+          | This script assumes there is a directory called lib containing some of  |
+          | the following JAR files:                                                |
+          |                                                                         |
+          | - beast.jar from https://github.com/CompEvol/beast2/releases            |
+          | - DensiTree.v2.2.7.jar from                                             |
+          |   https://www.cs.auckland.ac.nz/~remco/DensiTree/                       |
+          | - figtree.jar from https://github.com/rambaut/figtree/releases          |
+          | - tracer.jar from https://github.com/beast-dev/tracer/releases          |
+          |                                                                         |
+          | there are some functions to assist in downloading these JAR files such  |
+          | as get-beast2.6.7. You only need the JAR files for the programs that    |
+          | you want to run. The ant manual may be helpful for understanding and    |
+          | extending this script                                                   |
+          |                                                                         |
+          | - https://ant.apache.org/manual/index.html                              |
+          |                                                                         |
+          |_________________________________________________________________________|
+      </description>
+    <path id="classpath">
+      <fileset dir="lib" includes="**/*.jar"/>
+    </path>
 
-  <target name="clean">
-      <delete file="fake.txt" />
-  </target>
+    <target name="beauti2.6.7">
+      <java fork="true" classname="beast.app.beauti.Beauti">
+        <classpath>
+          <path refid="classpath"/>
+        </classpath>
+      </java>
+    </target>
+
+    <target name="beauti2.7.1">
+        <exec executable="sh">
+            <arg path="lib/beast/bin/beauti" />
+        </exec>
+    </target>
+
+    <target name="master">
+        <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+        <java fork="true" classname="beast.app.beastapp.BeastMain">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+            <arg line="-seed 1"/>
+            <arg path="${beastXML}"/>
+        </java>
+    </target>
+
+    <target name="mcmc2.6.7">
+      <echo>Running the MCMC sampler...</echo>
+      <java fork="true" classname="beast.app.beastapp.BeastMain">
+        <classpath>
+          <path refid="classpath"/>
+        </classpath>
+        <arg line="-seed 1"/>
+        <arg path="${beastXML}"/>
+      </java>
+    </target>
+
+    <target name="mcmc2.7.1">
+        <echo>Running the MCMC sampler...</echo>
+        <exec executable="sh">
+            <arg path="lib/beast/bin/beast" />
+            <arg line="-seed 1" />
+            <arg line="-overwrite" />
+            <arg path="${beastXML}"/>
+        </exec>
+    </target>
+
+    <target name="mcmc-keep-going">
+      <java fork="true" classname="beast.app.beastapp.BeastMain">
+        <classpath>
+          <path refid="classpath"/>
+        </classpath>
+        <arg line="-seed 1 -resume"/>
+        <arg path="${beastXML}"/>
+      </java>
+    </target>
+    <target name="figtree">
+      <java fork="true" jar="lib/figtree.jar">
+          </java>
+    </target>
+    <target name="densitree">
+      <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
+          </java>
+    </target>
+
+    <target name="clean">
+        <delete file="fake.txt" />
+    </target>
+#+end_src
+
+The following snippet adds two tasks: the first one fetches a copy of tracer and
+the second runs it.
+
+#+name: target:tracer
+#+begin_src xml :tangle cogsworth.xml
+    <target name="tracer">
+        <java fork="true" jar="lib/tracer/lib/tracer.jar">
+        </java>
+    </target>
+
+    <target name="get-tracer1.7.2">
+        <mkdir dir="lib" />
+        <get src="https://github.com/beast-dev/tracer/releases/download/v1.7.2/Tracer_v1.7.2.tgz" dest="lib/Tracer_v1.7.2.tgz" verbose="on" />
+        <untar src="lib/Tracer_v1.7.2.tgz" dest="lib/tracer" compression="gzip" />
+    </target>
 #+end_src
 
 The following target demonstrates how we can partially automate the set up by
@@ -123,15 +156,31 @@ they could be lumped into useful combinations.
 #+name: target:get-beast2.6.7
 #+begin_src xml :tangle cogsworth.xml
   <target name="get-beast2.6.7">
-      <mkdir dir="lib" />
-      <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
   </target>
 #+end_src
 
-While the [[target:get-beast2.6.7][get-beast2.6.7]] target helps get a JAR file to use in the analysis, to
-compile a new package we will need the BEAST2 source. The following target
-clones a copy of this. Note that if you want a particular version, you will need
-to check that version out yourself!
+Getting the most recent version seems to be a bit more messy, but this seems to
+work. Note that depending on which version of BEAST you get, you may need to
+tweak the commands to run it.
+
+#+name: target:get-beast2.7.1
+#+begin_src xml :tangle cogsworth.xml
+  <target name="get-beast2.7.1">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750"/>
+    <chmod file="lib/beast/bin/beauti" perm="750"/>
+    <chmod file="lib/beast/jre/bin/java" perm="750"/>
+  </target>
+#+end_src
+
+While the [[target:get-beast2.6.7][get-beast2.6.7]] and [[target:get-beast2.7.1][get-beast2.7.1]] targets helps get a JAR file to use
+in the analysis, to compile a new package we will need the BEAST2 source. The
+following target clones a copy of this. Note that if you want a particular
+version, you will need to check that version out yourself!
 
 #+begin_src xml :tangle cogsworth.xml
   <target name="clone-beast2">
