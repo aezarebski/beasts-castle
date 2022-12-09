@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <project name="cogsworth" basedir=".">
+
   <description>
          _________________________________________________________________________
         |                                                                         |
@@ -20,9 +21,10 @@
         |                                                                         |
         | $ ant -DbeastXML=demo.xml mcmc                                          |
         |                                                                         |
-        | There are some targets to fetch JAR files, for example                  |
+        | There are some targets to fetch JAR files, these are combined into the  |
+        | setuplib task.                                                          |
         |                                                                         |
-        | $ ant get-beast2.6.7                                                    |
+        | $ ant setuplib                                                          |
         |                                                                         |
         | To start tracer there is                                                |
         |                                                                         |
@@ -53,6 +55,7 @@
         |                                                                         |
         |_________________________________________________________________________|
     </description>
+
   <path id="classpath">
     <fileset dir="lib" includes="**/*.jar"/>
   </path>
@@ -124,6 +127,10 @@
   <target name="clean">
       <delete file="fake.txt" />
   </target>
+
+  <target name="setuplib" depends="setuplib2.7.1" />
+  <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
+  <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
 
 <target name="tracer">
     <java fork="true" jar="lib/tracer/lib/tracer.jar">
