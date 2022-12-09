@@ -1,26 +1,24 @@
-#+title: Build script
-#+Time-stamp: <Last modified: 2022-09-09 11:16:03>
+#+title: Skeletor
+#+Time-stamp: <Last modified: 2022-12-09 11:04:43>
 #+startup: overview
 #+OPTIONS: toc:2
 
-The [[file:./build.xml][=build.xml=]] build script described here has provided the basic structure for
-many [[http://www.beast2.org/][BEAST2]] packages. Just download [[https://github.com/aezarebski/myrmidons/blob/main/build.xml][this file]] and run =ant skeleton= to get
+The [[file:./skeletor.xml][=skeletor.xml=]] build script described here has provided the basic structure for
+many [[http://www.beast2.org/][BEAST2]] packages. Just download [[https://github.com/aezarebski/myrmidons/blob/main/skeletor.xml][this file]] and run =ant skeleton= to get
 started! This script was initially written by [[https://github.com/tgvaughan][Tim Vaughan]]. It is an [[https://ant.apache.org/][Apache Ant]]
 build script, if you want to learn more about Ant, the [[https://ant.apache.org/manual/][manual]] is a great place
 to start.
 
-* Build script
-
 ** Usage
 
-To use =build.xml=, simply copy that file into an empty directory and run =ant
+To use =skeletor.xml=, simply copy that file into an empty directory and run =ant
 skeleton= to set up the required. The resulting directory structure should look
 like the following example
 
 #+begin_example
 $ tree .
 .
-├── build.xml
+├── skeletor.xml
 ├── COPYING
 ├── doc
 ├── examples
@@ -42,7 +40,8 @@ include them in a =scripts= directory. Those files will be included when you
 
 The build script defines [[*Property definitions][properties]] and [[*Target definitions][targets]] described in more detail below.
 
-#+begin_src xml :tangle build.xml :noweb no-export
+#+begin_src xml :tangle skeletor.xml :noweb no-export
+  <?xml version="1.0"?>
   <project default="build" basedir=".">
 
     <description>
