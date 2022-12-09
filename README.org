@@ -1,15 +1,16 @@
 #+title: Beast's Castle
-#+Time-stamp: <Last modified: 2022-11-10 12:06:50>
+#+Time-stamp: <Last modified: 2022-12-09 11:06:36>
 #+startup: overview
 #+OPTIONS: toc:2
 
 This repository contains some helpful scripts for working with BEAST2.
 
-- [[file:./build-script.org][Build script]] describes a build script for starting a new package,
+- [[file:./skeletor.org][Skeletor build script]] describes a build script for starting a new package,
 - [[file:./cogsworth.org][Cogsworth]] contains some useful tasks for running analyses.
 
 To download Cogsworth from the command line:
 
 #+begin_src sh
   wget https://raw.githubusercontent.com/aezarebski/beasts-castle/main/cogsworth.xml
+  mv cogsworth.xml build.xml
 #+end_src
