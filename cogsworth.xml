@@ -1,51 +1,51 @@
 <?xml version="1.0"?>
 <project name="cogsworth" basedir=".">
 
-    <description>
-           _________________________________________________________________________
-          |                                                                         |
-          |          __________  ____________       ______  ____  ________  __      |
-          |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
-          |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
-          |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
-          |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
-          |                                                                         |
-          |                                                                         |
-          | The COGSWORTHv1.3 build script contains some useful tasks for working   |
-          | with BEAST.                                                             |
-          |                                                                         |
-          | Usage                                                                   |
-          | -----                                                                   |
-          |                                                                         |
-          | To run the MCMC analysis in demo.xml                                    |
-          |                                                                         |
-          | $ ant -DbeastXML=demo.xml mcmc                                          |
-          |                                                                         |
-          | There are some targets to fetch JAR files, these are combined into the  |
-          | setuplib task.                                                          |
-          |                                                                         |
-          | $ ant setuplib                                                          |
-          |                                                                         |
-          | To start tracer there is                                                |
-          |                                                                         |
-          | $ ant tracer                                                            |
-          |                                                                         |
-          | To print this help message and get a full list of available tasks       |
-          |                                                                         |
-          | $ ant -p                                                                |
-          |                                                                         |
-          | Libraries                                                               |
-          | ---------                                                               |
-          |                                                                         |
-          | There are some functions to assist in downloading these JAR files such  |
-          | as get-beast2.6.7. You only need the JAR files for the programs that    |
-          | you want to run. The ant manual may be helpful for understanding and    |
-          | extending this script                                                   |
-          |                                                                         |
-          | - https://ant.apache.org/manual/index.html                              |
-          |                                                                         |
-          |_________________________________________________________________________|
-    </description>
+  <description>
+         _________________________________________________________________________
+        |                                                                         |
+        |          __________  ____________       ______  ____  ________  __      |
+        |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
+        |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
+        |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
+        |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
+        |                                                                         |
+        |                                                                         |
+        | The COGSWORTHv1.3 build script contains some useful tasks for working   |
+        | with BEAST.                                                             |
+        |                                                                         |
+        | Usage                                                                   |
+        | -----                                                                   |
+        |                                                                         |
+        | To run the MCMC analysis in demo.xml                                    |
+        |                                                                         |
+        | $ ant -DbeastXML=demo.xml mcmc                                          |
+        |                                                                         |
+        | There are some targets to fetch JAR files, these are combined into the  |
+        | setuplib task.                                                          |
+        |                                                                         |
+        | $ ant setuplib                                                          |
+        |                                                                         |
+        | To start tracer there is                                                |
+        |                                                                         |
+        | $ ant tracer                                                            |
+        |                                                                         |
+        | To print this help message and get a full list of available tasks       |
+        |                                                                         |
+        | $ ant -p                                                                |
+        |                                                                         |
+        | Libraries                                                               |
+        | ---------                                                               |
+        |                                                                         |
+        | There are some functions to assist in downloading these JAR files such  |
+        | as get-beast2.6.7. You only need the JAR files for the programs that    |
+        | you want to run. The ant manual may be helpful for understanding and    |
+        | extending this script                                                   |
+        |                                                                         |
+        | - https://ant.apache.org/manual/index.html                              |
+        |                                                                         |
+        |_________________________________________________________________________|
+  </description>
 
     <path id="classpath">
         <fileset dir="lib" includes="**/*.jar" />
@@ -60,6 +60,12 @@
     </target>
 
     <target name="beauti2.7.1">
+        <exec executable="sh">
+            <arg path="lib/beast/bin/beauti" />
+        </exec>
+    </target>
+
+    <target name="beauti2.7.3">
         <exec executable="sh">
             <arg path="lib/beast/bin/beauti" />
         </exec>
@@ -125,12 +131,11 @@
         </java>
     </target>
 
-    <!-- This is only included as an example of what a cleaning task might look like -->
     <target name="clean">
         <delete file="fake.txt" />
     </target>
 
-    <target name="setuplib" depends="setuplib2.7.1" />
+    <target name="setuplib" depends="setuplib2.7.3" />
     <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
     <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
     <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />

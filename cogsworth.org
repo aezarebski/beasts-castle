@@ -1,5 +1,5 @@
 #+title: Cogsworth
-#+Time-stamp: <Last modified: 2022-12-09 11:15:25>
+#+Time-stamp: <Last modified: 2023-01-12 14:14:09>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -10,60 +10,51 @@ line.
 
 #+name: description
 #+begin_src xml
-      <description>
-             _________________________________________________________________________
-            |                                                                         |
-            |          __________  ____________       ______  ____  ________  __      |
-            |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
-            |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
-            |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
-            |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
-            |                                                                         |
-            |                                                                         |
-            | The COGSWORTHv1.2 build script contains some useful tasks for working   |
-            | with BEAST.                                                             |
-            |                                                                         |
-            | Usage                                                                   |
-            | -----                                                                   |
-            |                                                                         |
-            | To run the MCMC analysis in demo.xml                                    |
-            |                                                                         |
-            | $ ant -DbeastXML=demo.xml mcmc                                          |
-            |                                                                         |
-            | There are some targets to fetch JAR files, these are combined into the  |
-            | setuplib task.                                                          |
-            |                                                                         |
-            | $ ant setuplib                                                          |
-            |                                                                         |
-            | To start tracer there is                                                |
-            |                                                                         |
-            | $ ant tracer                                                            |
-            |                                                                         |
-            | To print this help message and get a full list of available tasks       |
-            |                                                                         |
-            | $ ant -p                                                                |
-            |                                                                         |
-            | Libraries                                                               |
-            | ---------                                                               |
-            |                                                                         |
-            | This script assumes there is a directory called lib containing some of  |
-            | the following JAR files:                                                |
-            |                                                                         |
-            | - beast.jar from https://github.com/CompEvol/beast2/releases            |
-            | - DensiTree.v2.2.7.jar from                                             |
-            |   https://www.cs.auckland.ac.nz/~remco/DensiTree/                       |
-            | - figtree.jar from https://github.com/rambaut/figtree/releases          |
-            | - tracer.jar from https://github.com/beast-dev/tracer/releases          |
-            |                                                                         |
-            | there are some functions to assist in downloading these JAR files such  |
-            | as get-beast2.6.7. You only need the JAR files for the programs that    |
-            | you want to run. The ant manual may be helpful for understanding and    |
-            | extending this script                                                   |
-            |                                                                         |
-            | - https://ant.apache.org/manual/index.html                              |
-            |                                                                         |
-            |_________________________________________________________________________|
-        </description>
+    <description>
+           _________________________________________________________________________
+          |                                                                         |
+          |          __________  ____________       ______  ____  ________  __      |
+          |         / ____/ __ \/ ____/ ___/ |     / / __ \/ __ \/_  __/ / / /      |
+          |        / /   / / / / / __ \__ \| | /| / / / / / /_/ / / / / /_/ /       |
+          |       / /___/ /_/ / /_/ /___/ /| |/ |/ / /_/ / _, _/ / / / __  /        |
+          |       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/         |
+          |                                                                         |
+          |                                                                         |
+          | The COGSWORTHv1.3 build script contains some useful tasks for working   |
+          | with BEAST.                                                             |
+          |                                                                         |
+          | Usage                                                                   |
+          | -----                                                                   |
+          |                                                                         |
+          | To run the MCMC analysis in demo.xml                                    |
+          |                                                                         |
+          | $ ant -DbeastXML=demo.xml mcmc                                          |
+          |                                                                         |
+          | There are some targets to fetch JAR files, these are combined into the  |
+          | setuplib task.                                                          |
+          |                                                                         |
+          | $ ant setuplib                                                          |
+          |                                                                         |
+          | To start tracer there is                                                |
+          |                                                                         |
+          | $ ant tracer                                                            |
+          |                                                                         |
+          | To print this help message and get a full list of available tasks       |
+          |                                                                         |
+          | $ ant -p                                                                |
+          |                                                                         |
+          | Libraries                                                               |
+          | ---------                                                               |
+          |                                                                         |
+          | There are some functions to assist in downloading these JAR files such  |
+          | as get-beast2.6.7. You only need the JAR files for the programs that    |
+          | you want to run. The ant manual may be helpful for understanding and    |
+          | extending this script                                                   |
+          |                                                                         |
+          | - https://ant.apache.org/manual/index.html                              |
+          |                                                                         |
+          |_________________________________________________________________________|
+    </description>
 #+end_src
 
 ** Build script
@@ -87,6 +78,12 @@ line.
     </target>
 
     <target name="beauti2.7.1">
+        <exec executable="sh">
+            <arg path="lib/beast/bin/beauti" />
+        </exec>
+    </target>
+
+    <target name="beauti2.7.3">
         <exec executable="sh">
             <arg path="lib/beast/bin/beauti" />
         </exec>
@@ -121,6 +118,16 @@ line.
             <arg line="-seed 1" />
             <arg line="-overwrite" />
             <arg path="${beastXML}"/>
+        </exec>
+    </target>
+
+    <target name="mcmc2.7.3">
+        <echo>Running the MCMC sampler...</echo>
+        <exec executable="sh">
+            <arg path="lib/beast/bin/beast" />
+            <arg line="-seed 1" />
+            <arg line="-overwrite" />
+            <arg path="${beastXML}" />
         </exec>
     </target>
 
@@ -166,6 +173,19 @@ the second runs it.
     </target>
 #+end_src
 
+It is also useful to be able to easily obtain a copy of tempest which is a
+program used to assess if there is temporal signal in an alignment of
+timestamped sequences.
+
+#+name: target:tempest
+#+begin_src xml :tangle cogsworth.xml
+    <target name="get-tempest1.5.3">
+        <mkdir dir="lib" />
+        <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
+        <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
+    </target>
+#+end_src
+
 The following target demonstrates how we can partially automate the set up by
 including targets that get the desired JAR files. When there are more of these
 they could be lumped into useful combinations.
@@ -184,14 +204,23 @@ tweak the commands to run it.
 
 #+name: target:get-beast2.7.1
 #+begin_src xml :tangle cogsworth.xml
-  <target name="get-beast2.7.1">
-    <mkdir dir="lib" />
-    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
-    <untar src="lib/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/" compression="gzip" />
-    <chmod file="lib/beast/bin/beast" perm="750"/>
-    <chmod file="lib/beast/bin/beauti" perm="750"/>
-    <chmod file="lib/beast/jre/bin/java" perm="750"/>
-  </target>
+    <target name="get-beast2.7.1">
+        <mkdir dir="lib" />
+        <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
+        <untar src="lib/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/" compression="gzip" />
+        <chmod file="lib/beast/bin/beast" perm="750" />
+        <chmod file="lib/beast/bin/beauti" perm="750" />
+        <chmod file="lib/beast/jre/bin/java" perm="750" />
+    </target>
+
+    <target name="get-beast2.7.3">
+        <mkdir dir="lib" />
+        <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/BEAST.v2.7.3.Linux.x86.tgz" verbose="on" />
+        <untar src="lib/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/" compression="gzip" />
+        <chmod file="lib/beast/bin/beast" perm="750" />
+        <chmod file="lib/beast/bin/beauti" perm="750" />
+        <chmod file="lib/beast/jre/bin/java" perm="750" />
+    </target>
 #+end_src
 
 While the [[target:get-beast2.6.7][get-beast2.6.7]] and [[target:get-beast2.7.1][get-beast2.7.1]] targets helps get a JAR file to use
@@ -225,7 +254,8 @@ version of BEAST2. There are other setup commands to set up older versions.
 
 #+name: setuplib
 #+begin_src xml
-  <target name="setuplib" depends="setuplib2.7.1" />
-  <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
-  <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
+    <target name="setuplib" depends="setuplib2.7.3" />
+    <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
+    <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
+    <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
 #+end_src
