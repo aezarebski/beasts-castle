@@ -4,6 +4,8 @@
 
 * Cogsworth
 
+** Documentation
+
 #+begin_src xml :tangle cogsworth.xml :padline no
   <?xml version="1.0"?>
   <project name="cogsworth" basedir=".">
@@ -17,7 +19,7 @@
 	         \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/
 
 
-	   The COGSWORTHv1.3 build script contains some useful tasks for working
+	   The COGSWORTHv1.4 build script contains some useful tasks for working
 	   with BEAST.
 
 	   Usage
@@ -55,27 +57,31 @@
     <path id="classpath">
       <fileset dir="lib" includes="**/*.jar"/>
     </path>
+#+end_src
 
-    <target name="beauti2.6.7">
-      <java fork="true" classname="beast.app.beauti.Beauti">
-	<classpath>
-	  <path refid="classpath"/>
-	</classpath>
-      </java>
-    </target>
+** Common targets
 
-    <target name="beauti2.7.1">
-	<exec executable="sh">
-	    <arg path="lib/beast/bin/beauti" />
-	</exec>
-    </target>
+*** BEAUti
 
-    <target name="beauti2.7.3">
-	<exec executable="sh">
-	    <arg path="lib/beast/bin/beauti" />
-	</exec>
-    </target>
+#+begin_src xml :tangle cogsworth.xml
+  <target name="beauti2.6.7">
+    <java fork="true" classname="beast.app.beauti.Beauti">
+      <classpath>
+	<path refid="classpath"/>
+      </classpath>
+    </java>
+  </target>
 
+  <target name="beauti2.7.x">
+    <exec executable="sh">
+      <arg path="lib/beast/bin/beauti" />
+    </exec>
+  </target>
+#+end_src
+
+*** Simulation with Master
+
+#+begin_src xml :tangle cogsworth.xml
     <target name="master">
 	<echo>Running the MASTER simulation defined in ${beastXML}</echo>
 	<java fork="true" classname="beast.app.beastapp.BeastMain">
@@ -86,7 +92,11 @@
 	    <arg path="${beastXML}"/>
 	</java>
     </target>
+#+end_src
 
+*** Running MCMC
+
+#+begin_src xml :tangle cogsworth.xml
     <target name="mcmc2.6.7">
       <echo>Running the MCMC sampler...</echo>
       <java fork="true" classname="beast.app.beastapp.BeastMain">
@@ -98,23 +108,13 @@
       </java>
     </target>
 
-    <target name="mcmc2.7.1">
+    <target name="mcmc2.7.x">
 	<echo>Running the MCMC sampler...</echo>
 	<exec executable="sh">
 	    <arg path="lib/beast/bin/beast" />
 	    <arg line="-seed 1" />
 	    <arg line="-overwrite" />
 	    <arg path="${beastXML}"/>
-	</exec>
-    </target>
-
-    <target name="mcmc2.7.3">
-	<echo>Running the MCMC sampler...</echo>
-	<exec executable="sh">
-	    <arg path="lib/beast/bin/beast" />
-	    <arg line="-seed 1" />
-	    <arg line="-overwrite" />
-	    <arg path="${beastXML}" />
 	</exec>
     </target>
 
@@ -127,6 +127,11 @@
 	<arg path="${beastXML}"/>
       </java>
     </target>
+#+end_src
+
+*** Other
+
+#+begin_src xml :tangle cogsworth.xml
     <target name="figtree">
       <java fork="true" jar="lib/figtree.jar">
 	  </java>
@@ -147,11 +152,16 @@ We include the =setuplib= target to set up an analysis with the most recent
 version of BEAST2. There are other setup commands to set up older versions.
 
 #+begin_src xml :tangle cogsworth.xml
-  <target name="setuplib" depends="setuplib2.7.3" />
+  <target name="setuplib" depends="setuplib2.7.5" />
+
+  <target name="setuplib2.7.5" depends="get-beast2.7.5,get-tracer1.7.2" />
+  <target name="setuplib2.7.4" depends="get-beast2.7.4,get-tracer1.7.2" />
   <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
   <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
   <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
 #+end_src
+
+*** Tracer
 
 The following snippet adds two tasks: the first one fetches a copy of tracer and
 the second runs it.
@@ -169,17 +179,26 @@ the second runs it.
   </target>
 #+end_src
 
+*** Tempest
+
 It is also useful to be able to easily obtain a copy of tempest which is a
 program used to assess if there is temporal signal in an alignment of
 timestamped sequences.
 
 #+begin_src xml :tangle cogsworth.xml
-  <target name="get-tempest1.5.3">
-      <mkdir dir="lib" />
-      <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
-      <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
-  </target>
+    <target name="get-tempest1.5.3">
+        <mkdir dir="lib" />
+        <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
+        <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tempest" compression="gzip" />
+    </target>
+
+    <target name="tempest">
+        <java fork="true" jar="lib/tempest/TempEst_v1.5.3/lib/tempest.jar">
+        </java>
+    </target>
 #+end_src
+
+*** Beast
 
 The following target demonstrates how we can partially automate the set up by
 including targets that get the desired JAR files. When there are more of these
@@ -214,7 +233,27 @@ tweak the commands to run it.
       <chmod file="lib/beast/bin/beauti" perm="750" />
       <chmod file="lib/beast/jre/bin/java" perm="750" />
   </target>
+
+  <target name="get-beast2.7.4">
+      <mkdir dir="lib" />
+      <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.4/BEAST.v2.7.4.Linux.x86.tgz" dest="lib/BEAST.v2.7.4.Linux.x86.tgz" verbose="on" />
+      <untar src="lib/BEAST.v2.7.4.Linux.x86.tgz" dest="lib/" compression="gzip" />
+      <chmod file="lib/beast/bin/beast" perm="750" />
+      <chmod file="lib/beast/bin/beauti" perm="750" />
+      <chmod file="lib/beast/jre/bin/java" perm="750" />
+  </target>
+
+  <target name="get-beast2.7.5">
+      <mkdir dir="lib" />
+      <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.5/BEAST.v2.7.5.Linux.x86.tgz" dest="lib/BEAST.v2.7.5.Linux.x86.tgz" verbose="on" />
+      <untar src="lib/BEAST.v2.7.5.Linux.x86.tgz" dest="lib/" compression="gzip" />
+      <chmod file="lib/beast/bin/beast" perm="750" />
+      <chmod file="lib/beast/bin/beauti" perm="750" />
+      <chmod file="lib/beast/jre/bin/java" perm="750" />
+  </target>
 #+end_src
+
+*** Beast from source
 
 While the [[target:get-beast2.6.7][get-beast2.6.7]] and [[target:get-beast2.7.1][get-beast2.7.1]] targets helps get a JAR file to use
 in the analysis, to compile a new package we will need the BEAST2 source. The
@@ -235,6 +274,8 @@ version, you will need to check that version out yourself!
       </echo>
   </target>
 #+end_src
+
+** Fin
 
 #+begin_src xml :tangle cogsworth.xml
   </project>

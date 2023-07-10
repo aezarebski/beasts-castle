@@ -10,7 +10,7 @@
 	       \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/
 
 
-	 The COGSWORTHv1.3 build script contains some useful tasks for working
+	 The COGSWORTHv1.4 build script contains some useful tasks for working
 	 with BEAST.
 
 	 Usage
@@ -49,91 +49,79 @@
     <fileset dir="lib" includes="**/*.jar"/>
   </path>
 
-  <target name="beauti2.6.7">
-    <java fork="true" classname="beast.app.beauti.Beauti">
-      <classpath>
-	<path refid="classpath"/>
-      </classpath>
+<target name="beauti2.6.7">
+  <java fork="true" classname="beast.app.beauti.Beauti">
+    <classpath>
+      <path refid="classpath"/>
+    </classpath>
+  </java>
+</target>
+
+<target name="beauti2.7.x">
+  <exec executable="sh">
+    <arg path="lib/beast/bin/beauti" />
+  </exec>
+</target>
+
+<target name="master">
+    <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+    <java fork="true" classname="beast.app.beastapp.BeastMain">
+	<classpath>
+	    <path refid="classpath"/>
+	</classpath>
+	<arg line="-seed 1"/>
+	<arg path="${beastXML}"/>
     </java>
-  </target>
+</target>
 
-  <target name="beauti2.7.1">
-      <exec executable="sh">
-	  <arg path="lib/beast/bin/beauti" />
-      </exec>
-  </target>
+<target name="mcmc2.6.7">
+  <echo>Running the MCMC sampler...</echo>
+  <java fork="true" classname="beast.app.beastapp.BeastMain">
+    <classpath>
+      <path refid="classpath"/>
+    </classpath>
+    <arg line="-seed 1"/>
+    <arg path="${beastXML}"/>
+  </java>
+</target>
 
-  <target name="beauti2.7.3">
-      <exec executable="sh">
-	  <arg path="lib/beast/bin/beauti" />
-      </exec>
-  </target>
-
-  <target name="master">
-      <echo>Running the MASTER simulation defined in ${beastXML}</echo>
-      <java fork="true" classname="beast.app.beastapp.BeastMain">
-	  <classpath>
-	      <path refid="classpath"/>
-	  </classpath>
-	  <arg line="-seed 1"/>
-	  <arg path="${beastXML}"/>
-      </java>
-  </target>
-
-  <target name="mcmc2.6.7">
+<target name="mcmc2.7.x">
     <echo>Running the MCMC sampler...</echo>
-    <java fork="true" classname="beast.app.beastapp.BeastMain">
-      <classpath>
-	<path refid="classpath"/>
-      </classpath>
-      <arg line="-seed 1"/>
-      <arg path="${beastXML}"/>
-    </java>
-  </target>
+    <exec executable="sh">
+	<arg path="lib/beast/bin/beast" />
+	<arg line="-seed 1" />
+	<arg line="-overwrite" />
+	<arg path="${beastXML}"/>
+    </exec>
+</target>
 
-  <target name="mcmc2.7.1">
-      <echo>Running the MCMC sampler...</echo>
-      <exec executable="sh">
-	  <arg path="lib/beast/bin/beast" />
-	  <arg line="-seed 1" />
-	  <arg line="-overwrite" />
-	  <arg path="${beastXML}"/>
-      </exec>
-  </target>
+<target name="mcmc-keep-going">
+  <java fork="true" classname="beast.app.beastapp.BeastMain">
+    <classpath>
+      <path refid="classpath"/>
+    </classpath>
+    <arg line="-seed 1 -resume"/>
+    <arg path="${beastXML}"/>
+  </java>
+</target>
 
-  <target name="mcmc2.7.3">
-      <echo>Running the MCMC sampler...</echo>
-      <exec executable="sh">
-	  <arg path="lib/beast/bin/beast" />
-	  <arg line="-seed 1" />
-	  <arg line="-overwrite" />
-	  <arg path="${beastXML}" />
-      </exec>
-  </target>
+<target name="figtree">
+  <java fork="true" jar="lib/figtree.jar">
+      </java>
+</target>
+<target name="densitree">
+  <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
+      </java>
+</target>
 
-  <target name="mcmc-keep-going">
-    <java fork="true" classname="beast.app.beastapp.BeastMain">
-      <classpath>
-	<path refid="classpath"/>
-      </classpath>
-      <arg line="-seed 1 -resume"/>
-      <arg path="${beastXML}"/>
-    </java>
-  </target>
-  <target name="figtree">
-    <java fork="true" jar="lib/figtree.jar">
-	</java>
-  </target>
-  <target name="densitree">
-    <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
-	</java>
-  </target>
+<target name="clean">
+    <delete file="fake.txt" />
+</target>
 
-  <target name="clean">
-      <delete file="fake.txt" />
-  </target>
+<target name="setuplib" depends="setuplib2.7.5" />
 
-<target name="setuplib" depends="setuplib2.7.3" />
+<target name="setuplib2.7.5" depends="get-beast2.7.5,get-tracer1.7.2" />
+<target name="setuplib2.7.4" depends="get-beast2.7.4,get-tracer1.7.2" />
 <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
 <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
 <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
@@ -152,7 +140,12 @@
 <target name="get-tempest1.5.3">
     <mkdir dir="lib" />
     <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
-    <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
+    <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tempest" compression="gzip" />
+</target>
+
+<target name="tempest">
+    <java fork="true" jar="lib/tempest/TempEst_v1.5.3/lib/tempest.jar">
+    </java>
 </target>
 
 <target name="get-beast2.6.7">
@@ -173,6 +166,24 @@
     <mkdir dir="lib" />
     <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/BEAST.v2.7.3.Linux.x86.tgz" verbose="on" />
     <untar src="lib/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750" />
+    <chmod file="lib/beast/bin/beauti" perm="750" />
+    <chmod file="lib/beast/jre/bin/java" perm="750" />
+</target>
+
+<target name="get-beast2.7.4">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.4/BEAST.v2.7.4.Linux.x86.tgz" dest="lib/BEAST.v2.7.4.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.4.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750" />
+    <chmod file="lib/beast/bin/beauti" perm="750" />
+    <chmod file="lib/beast/jre/bin/java" perm="750" />
+</target>
+
+<target name="get-beast2.7.5">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.5/BEAST.v2.7.5.Linux.x86.tgz" dest="lib/BEAST.v2.7.5.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.5.Linux.x86.tgz" dest="lib/" compression="gzip" />
     <chmod file="lib/beast/bin/beast" perm="750" />
     <chmod file="lib/beast/bin/beauti" perm="750" />
     <chmod file="lib/beast/jre/bin/java" perm="750" />
