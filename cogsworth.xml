@@ -142,6 +142,7 @@
   <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
 <!-- Build script:1 ends here -->
 
+<!-- [[file:cogsworth.org::target:tracer][target:tracer]] -->
 <target name="tracer">
     <java fork="true" jar="lib/tracer/lib/tracer.jar">
     </java>
@@ -152,18 +153,24 @@
     <get src="https://github.com/beast-dev/tracer/releases/download/v1.7.2/Tracer_v1.7.2.tgz" dest="lib/Tracer_v1.7.2.tgz" verbose="on" />
     <untar src="lib/Tracer_v1.7.2.tgz" dest="lib/tracer" compression="gzip" />
 </target>
+<!-- target:tracer ends here -->
 
+<!-- [[file:cogsworth.org::target:tempest][target:tempest]] -->
 <target name="get-tempest1.5.3">
     <mkdir dir="lib" />
     <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
     <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
 </target>
+<!-- target:tempest ends here -->
 
+<!-- [[file:cogsworth.org::target:get-beast2.6.7][target:get-beast2.6.7]] -->
 <target name="get-beast2.6.7">
   <mkdir dir="lib" />
   <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
 </target>
+<!-- target:get-beast2.6.7 ends here -->
 
+<!-- [[file:cogsworth.org::target:get-beast2.7.1][target:get-beast2.7.1]] -->
 <target name="get-beast2.7.1">
     <mkdir dir="lib" />
     <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
@@ -181,7 +188,9 @@
     <chmod file="lib/beast/bin/beauti" perm="750" />
     <chmod file="lib/beast/jre/bin/java" perm="750" />
 </target>
+<!-- target:get-beast2.7.1 ends here -->
 
+<!-- [[file:cogsworth.org::*Build script][Build script:6]] -->
 <target name="clone-beast2">
     <exec executable="/usr/bin/git">
         <arg value="clone" />
@@ -194,5 +203,8 @@
         You may want to run `git fetch --all --tags`
     </echo>
 </target>
+<!-- Build script:6 ends here -->
 
+<!-- [[file:cogsworth.org::*Build script][Build script:7]] -->
 </project>
+<!-- Build script:7 ends here -->
