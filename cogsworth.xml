@@ -1,3 +1,4 @@
+<!-- [[file:cogsworth.org::*Build script][Build script:1]] -->
 <?xml version="1.0"?>
 <project name="cogsworth" basedir=".">
 
@@ -47,150 +48,151 @@
         |_________________________________________________________________________|
   </description>
 
-    <path id="classpath">
-        <fileset dir="lib" includes="**/*.jar" />
-    </path>
+  <path id="classpath">
+    <fileset dir="lib" includes="**/*.jar"/>
+  </path>
 
-    <target name="beauti2.6.7">
-        <java fork="true" classname="beast.app.beauti.Beauti">
-            <classpath>
-                <path refid="classpath" />
-            </classpath>
+  <target name="beauti2.6.7">
+    <java fork="true" classname="beast.app.beauti.Beauti">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="beauti2.7.1">
+      <exec executable="sh">
+          <arg path="lib/beast/bin/beauti" />
+      </exec>
+  </target>
+
+  <target name="beauti2.7.3">
+      <exec executable="sh">
+          <arg path="lib/beast/bin/beauti" />
+      </exec>
+  </target>
+
+  <target name="master">
+      <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+      <java fork="true" classname="beast.app.beastapp.BeastMain">
+          <classpath>
+              <path refid="classpath"/>
+          </classpath>
+          <arg line="-seed 1"/>
+          <arg path="${beastXML}"/>
+      </java>
+  </target>
+
+  <target name="mcmc2.6.7">
+    <echo>Running the MCMC sampler...</echo>
+    <java fork="true" classname="beast.app.beastapp.BeastMain">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <arg line="-seed 1"/>
+      <arg path="${beastXML}"/>
+    </java>
+  </target>
+
+  <target name="mcmc2.7.1">
+      <echo>Running the MCMC sampler...</echo>
+      <exec executable="sh">
+          <arg path="lib/beast/bin/beast" />
+          <arg line="-seed 1" />
+          <arg line="-overwrite" />
+          <arg path="${beastXML}"/>
+      </exec>
+  </target>
+
+  <target name="mcmc2.7.3">
+      <echo>Running the MCMC sampler...</echo>
+      <exec executable="sh">
+          <arg path="lib/beast/bin/beast" />
+          <arg line="-seed 1" />
+          <arg line="-overwrite" />
+          <arg path="${beastXML}" />
+      </exec>
+  </target>
+
+  <target name="mcmc-keep-going">
+    <java fork="true" classname="beast.app.beastapp.BeastMain">
+      <classpath>
+        <path refid="classpath"/>
+      </classpath>
+      <arg line="-seed 1 -resume"/>
+      <arg path="${beastXML}"/>
+    </java>
+  </target>
+  <target name="figtree">
+    <java fork="true" jar="lib/figtree.jar">
         </java>
-    </target>
-
-    <target name="beauti2.7.1">
-        <exec executable="sh">
-            <arg path="lib/beast/bin/beauti" />
-        </exec>
-    </target>
-
-    <target name="beauti2.7.3">
-        <exec executable="sh">
-            <arg path="lib/beast/bin/beauti" />
-        </exec>
-    </target>
-
-    <target name="master">
-        <echo>Running the MASTER simulation defined in ${beastXML}</echo>
-        <java fork="true" classname="beast.app.beastapp.BeastMain">
-            <classpath>
-                <path refid="classpath" />
-            </classpath>
-            <arg line="-seed 1" />
-            <arg path="${beastXML}" />
+  </target>
+  <target name="densitree">
+    <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
         </java>
-    </target>
+  </target>
 
-    <target name="mcmc2.6.7">
-        <echo>Running the MCMC sampler...</echo>
-        <java fork="true" classname="beast.app.beastapp.BeastMain">
-            <classpath>
-                <path refid="classpath" />
-            </classpath>
-            <arg line="-seed 1" />
-            <arg path="${beastXML}" />
-        </java>
-    </target>
+  <target name="clean">
+      <delete file="fake.txt" />
+  </target>
 
-    <target name="mcmc2.7.1">
-        <echo>Running the MCMC sampler...</echo>
-        <exec executable="sh">
-            <arg path="lib/beast/bin/beast" />
-            <arg line="-seed 1" />
-            <arg line="-overwrite" />
-            <arg path="${beastXML}" />
-        </exec>
-    </target>
+  <target name="setuplib" depends="setuplib2.7.3" />
+  <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
+  <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
+  <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
+<!-- Build script:1 ends here -->
 
-    <target name="mcmc2.7.3">
-        <echo>Running the MCMC sampler...</echo>
-        <exec executable="sh">
-            <arg path="lib/beast/bin/beast" />
-            <arg line="-seed 1" />
-            <arg line="-overwrite" />
-            <arg path="${beastXML}" />
-        </exec>
-    </target>
+<target name="tracer">
+    <java fork="true" jar="lib/tracer/lib/tracer.jar">
+    </java>
+</target>
 
-    <target name="mcmc-keep-going">
-        <java fork="true" classname="beast.app.beastapp.BeastMain">
-            <classpath>
-                <path refid="classpath" />
-            </classpath>
-            <arg line="-seed 1 -resume" />
-            <arg path="${beastXML}" />
-        </java>
-    </target>
-    <target name="figtree">
-        <java fork="true" jar="lib/figtree.jar">
-        </java>
-    </target>
-    <target name="densitree">
-        <java fork="true" jar="lib/DensiTree.v2.2.7.jar">
-        </java>
-    </target>
+<target name="get-tracer1.7.2">
+    <mkdir dir="lib" />
+    <get src="https://github.com/beast-dev/tracer/releases/download/v1.7.2/Tracer_v1.7.2.tgz" dest="lib/Tracer_v1.7.2.tgz" verbose="on" />
+    <untar src="lib/Tracer_v1.7.2.tgz" dest="lib/tracer" compression="gzip" />
+</target>
 
-    <target name="clean">
-        <delete file="fake.txt" />
-    </target>
+<target name="get-tempest1.5.3">
+    <mkdir dir="lib" />
+    <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
+    <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
+</target>
 
-    <target name="setuplib" depends="setuplib2.7.3" />
-    <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
-    <target name="setuplib2.7.1" depends="get-beast2.7.1,get-tracer1.7.2" />
-    <target name="setuplib2.6.7" depends="get-beast2.6.7,get-tracer1.7.2" />
+<target name="get-beast2.6.7">
+  <mkdir dir="lib" />
+  <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
+</target>
 
-    <target name="tracer">
-        <java fork="true" jar="lib/tracer/lib/tracer.jar">
-        </java>
-    </target>
+<target name="get-beast2.7.1">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750" />
+    <chmod file="lib/beast/bin/beauti" perm="750" />
+    <chmod file="lib/beast/jre/bin/java" perm="750" />
+</target>
 
-    <target name="get-tracer1.7.2">
-        <mkdir dir="lib" />
-        <get src="https://github.com/beast-dev/tracer/releases/download/v1.7.2/Tracer_v1.7.2.tgz" dest="lib/Tracer_v1.7.2.tgz" verbose="on" />
-        <untar src="lib/Tracer_v1.7.2.tgz" dest="lib/tracer" compression="gzip" />
-    </target>
+<target name="get-beast2.7.3">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/BEAST.v2.7.3.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750" />
+    <chmod file="lib/beast/bin/beauti" perm="750" />
+    <chmod file="lib/beast/jre/bin/java" perm="750" />
+</target>
 
-    <target name="get-tempest1.5.3">
-        <mkdir dir="lib" />
-        <get src="https://github.com/beast-dev/Tempest/releases/download/v1.5.3/TempEst_v1.5.3.tgz" dest="lib/TempEst_v1.5.3.tgz" verbose="on" />
-        <untar src="lib/TempEst_v1.5.3.tgz" dest="lib/tracer" compression="gzip" />
-    </target>
-
-    <target name="get-beast2.6.7">
-        <mkdir dir="lib" />
-        <get src="https://github.com/CompEvol/beast2/releases/download/v2.6.7/beast.jar" dest="lib/beast.jar" verbose="on" />
-    </target>
-
-    <target name="get-beast2.7.1">
-        <mkdir dir="lib" />
-        <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.1/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/BEAST.v2.7.1.Linux.x86.tgz" verbose="on" />
-        <untar src="lib/BEAST.v2.7.1.Linux.x86.tgz" dest="lib/" compression="gzip" />
-        <chmod file="lib/beast/bin/beast" perm="750" />
-        <chmod file="lib/beast/bin/beauti" perm="750" />
-        <chmod file="lib/beast/jre/bin/java" perm="750" />
-    </target>
-
-    <target name="get-beast2.7.3">
-        <mkdir dir="lib" />
-        <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.3/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/BEAST.v2.7.3.Linux.x86.tgz" verbose="on" />
-        <untar src="lib/BEAST.v2.7.3.Linux.x86.tgz" dest="lib/" compression="gzip" />
-        <chmod file="lib/beast/bin/beast" perm="750" />
-        <chmod file="lib/beast/bin/beauti" perm="750" />
-        <chmod file="lib/beast/jre/bin/java" perm="750" />
-    </target>
-
-    <target name="clone-beast2">
-        <exec executable="/usr/bin/git">
-            <arg value="clone" />
-            <arg value="--depth" />
-            <arg value="1" />
-            <arg value="https://github.com/CompEvol/beast2.git" />
-            <arg value="beast2" />
-        </exec>
-        <echo>
-            You may want to run `git fetch --all --tags`
-        </echo>
-    </target>
+<target name="clone-beast2">
+    <exec executable="/usr/bin/git">
+        <arg value="clone" />
+        <arg value="--depth" />
+        <arg value="1" />
+        <arg value="https://github.com/CompEvol/beast2.git" />
+        <arg value="beast2" />
+    </exec>
+    <echo>
+        You may want to run `git fetch --all --tags`
+    </echo>
+</target>
 
 </project>

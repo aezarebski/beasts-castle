@@ -59,7 +59,7 @@ line.
 
 ** Build script
 
-#+begin_src xml :tangle cogsworth.xml :noweb no-export
+#+begin_src xml :tangle cogsworth.xml :noweb no-export :comments link
   <?xml version="1.0"?>
   <project name="cogsworth" basedir=".">
 
