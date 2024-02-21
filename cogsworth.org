@@ -79,19 +79,49 @@
   </target>
 #+end_src
 
-*** Simulation with Master
+*** Simulation with MASTER
+:properties:
+:custom_id: sec-master
+:end:
+
+You should probably be using =remaster= now as described [[#sec-remaster][below]]. *Note*
+that this will use a fixed seed for the simulations.
 
 #+begin_src xml :tangle cogsworth.xml
-    <target name="master">
-	<echo>Running the MASTER simulation defined in ${beastXML}</echo>
-	<java fork="true" classname="beast.app.beastapp.BeastMain">
-	    <classpath>
-		<path refid="classpath"/>
-	    </classpath>
-	    <arg line="-seed 1"/>
-	    <arg path="${beastXML}"/>
-	</java>
-    </target>
+  <target name="master"
+	  description="Run a MASTER simulation: ant master -DbeastXML=foo.xml">
+    <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+    <java fork="true" classname="beast.app.beastapp.BeastMain">
+      <classpath>
+	<path refid="classpath"/>
+      </classpath>
+      <arg line="-seed 1"/>
+      <arg path="${beastXML}"/>
+    </java>
+  </target>
+#+end_src
+
+*** Simulation with remaster
+:properties:
+:custom_id: sec-remaster
+:end:
+
+Remaster is a re-write of MASTER and has better performance. It is the
+preferred mechanism to simulate. The following target can be used to
+run remaster simulations from the command line. *Note* that this will
+use a fixed seed.
+
+#+begin_src xml :tangle cogsworth.xml
+  <target name="remaster"
+	  description="Run a remaster simulation: ant remaster -DbeastXMl=sim.xml">
+    <echo>Running the remaster simulation defined in ${beastXML}</echo>
+    <exec executable="sh">
+      <arg path="lib/beast/bin/beast" />
+      <arg line="-seed 1" />
+      <arg line="-overwrite" />
+      <arg path="${beastXML}" />
+    </exec>
+  </target>
 #+end_src
 
 *** Running MCMC

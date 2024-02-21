@@ -63,15 +63,27 @@
   </exec>
 </target>
 
-<target name="master">
-    <echo>Running the MASTER simulation defined in ${beastXML}</echo>
-    <java fork="true" classname="beast.app.beastapp.BeastMain">
-	<classpath>
-	    <path refid="classpath"/>
-	</classpath>
-	<arg line="-seed 1"/>
-	<arg path="${beastXML}"/>
-    </java>
+<target name="master"
+	description="Run a MASTER simulation: ant master -DbeastXML=foo.xml">
+  <echo>Running the MASTER simulation defined in ${beastXML}</echo>
+  <java fork="true" classname="beast.app.beastapp.BeastMain">
+    <classpath>
+      <path refid="classpath"/>
+    </classpath>
+    <arg line="-seed 1"/>
+    <arg path="${beastXML}"/>
+  </java>
+</target>
+
+<target name="remaster"
+	description="Run a remaster simulation: ant remaster -DbeastXMl=sim.xml">
+  <echo>Running the remaster simulation defined in ${beastXML}</echo>
+  <exec executable="sh">
+    <arg path="lib/beast/bin/beast" />
+    <arg line="-seed 1" />
+    <arg line="-overwrite" />
+    <arg path="${beastXML}" />
+  </exec>
 </target>
 
 <target name="mcmc2.6.7">
