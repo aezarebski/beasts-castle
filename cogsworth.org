@@ -19,7 +19,7 @@
 	         \____/\____/\____//____/ |__/|__/\____/_/ |_| /_/ /_/ /_/
 
 
-	   The COGSWORTHv1.4 build script contains some useful tasks for working
+	   The COGSWORTHv1.5 build script contains some useful tasks for working
 	   with BEAST.
 
 	   Usage
@@ -182,8 +182,11 @@ We include the =setuplib= target to set up an analysis with the most recent
 version of BEAST2. There are other setup commands to set up older versions.
 
 #+begin_src xml :tangle cogsworth.xml
-  <target name="setuplib" depends="setuplib2.7.5" />
+  <target name="setuplib"
+	  description="This will set up BEAST2 tooling."
+	  depends="setuplib2.7.6" />
 
+  <target name="setuplib2.7.6" depends="get-beast2.7.6,get-tracer1.7.2" />
   <target name="setuplib2.7.5" depends="get-beast2.7.5,get-tracer1.7.2" />
   <target name="setuplib2.7.4" depends="get-beast2.7.4,get-tracer1.7.2" />
   <target name="setuplib2.7.3" depends="get-beast2.7.3,get-tracer1.7.2" />
@@ -280,6 +283,15 @@ tweak the commands to run it.
       <chmod file="lib/beast/bin/beast" perm="750" />
       <chmod file="lib/beast/bin/beauti" perm="750" />
       <chmod file="lib/beast/jre/bin/java" perm="750" />
+  </target>
+
+  <target name="get-beast2.7.6">
+    <mkdir dir="lib" />
+    <get src="https://github.com/CompEvol/beast2/releases/download/v2.7.6/BEAST.v2.7.6.Linux.x86.tgz" dest="lib/BEAST.v2.7.6.Linux.x86.tgz" verbose="on" />
+    <untar src="lib/BEAST.v2.7.6.Linux.x86.tgz" dest="lib/" compression="gzip" />
+    <chmod file="lib/beast/bin/beast" perm="750" />
+    <chmod file="lib/beast/bin/beauti" perm="750" />
+    <chmod file="lib/beast/jre/bin/java" perm="750" />
   </target>
 #+end_src
 
