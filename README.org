@@ -1,5 +1,4 @@
 #+title: Beast's Castle
-#+Time-stamp: <Last modified: 2022-12-09 11:06:36>
 #+startup: overview
 #+OPTIONS: toc:2
 
@@ -13,4 +12,5 @@ To download Cogsworth from the command line:
 #+begin_src sh
   wget https://raw.githubusercontent.com/aezarebski/beasts-castle/main/cogsworth.xml
   mv cogsworth.xml build.xml
+  ant -p  # to see what it can do
 #+end_src
